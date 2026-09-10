@@ -1,0 +1,150 @@
+{% extends "admin-layout.twig" %}
+
+{% block head %}
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+{% endblock %}
+
+{% macro render_field(name, def, value) %}
+{% set label    = def.label|default(name|replace({'_': ' '})|title) %}
+{% set required = def.required|default(false) %}
+<div class="mb-3">
+    {% if def.type != 'toggle' %}
+    <label class="form-label fw-semibold" for="field_{{ name }}">
+        {{ label }}{% if required %} <span class="text-danger">*</span>{% endif %}
+    </label>
+    {% endif %}
+
+    {% if def.type == 'richtext' %}
+        <div data-richtext-editor="{{ name }}"></div>
+        <textarea id="field_{{ name }}"
+                  name="{{ name }}"
+                  class="d-none">{{ value|default('') }}</textarea>
+
+    {% elseif def.type == 'select' %}
+        <select id="field_{{ name }}" name="{{ name }}" class="form-select">
+            <option value="">— select —</option>
+            {% for opt in def.options|default([]) %}
+            <option value="{{ opt }}" {% if value == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+        </select>
+
+    {% elseif def.type == 'toggle' %}
+        <div class="form-check form-switch pt-1">
+            <input type="hidden" name="{{ name }}" value="0">
+            <input type="checkbox"
+                   id="field_{{ name }}"
+                   name="{{ name }}"
+                   value="1"
+                   class="form-check-input"
+                   {% if value %}checked{% endif %}>
+            <label class="form-check-label fw-semibold" for="field_{{ name }}">{{ label }}</label>
+        </div>
+
+    {% elseif def.type == 'number' %}
+        <input type="number"
+               id="field_{{ name }}"
+               name="{{ name }}"
+               value="{{ value is not null ? value : '' }}"
+               class="form-control"
+               step="any"
+               {% if required %}required{% endif %}>
+
+    {% elseif def.type == 'date' %}
+        <input type="date"
+               id="field_{{ name }}"
+               name="{{ name }}"
+               value="{{ value ? value|slice(0, 10) : '' }}"
+               class="form-control"
+               {% if required %}required{% endif %}>
+
+    {% else %}{# text #}
+        <input type="text"
+               id="field_{{ name }}"
+               name="{{ name }}"
+               value="{{ value|default('') }}"
+               class="form-control"
+               {% if required %}required{% endif %}>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% import _self as f %}
+
+{% block admin_content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="post" action="{{ form_action }}" id="content-form">
+            {{ csrf_field('content_' ~ slug) }}
+
+            {% for row in grid %}
+            {% set col_count = row|length %}
+            <div class="row g-3">
+                {% for field_name in row %}
+                {% set def       = fields[field_name]|default({}) %}
+                {% set val       = item ? item[field_name]|default(null) : null %}
+                {% set col_width = def.width is defined ? def.width : (12 // col_count) %}
+                <div class="col-{{ col_width }}">
+                    {{ f.render_field(field_name, def, val) }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <div class="d-flex gap-2 mt-4 pt-2 border-top">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{{ content_base }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+(function () {
+    var editors = [];
+    {% if upload_url is defined and upload_url %}
+    var uploadUrl = {{ upload_url|json_encode|raw }};
+    {% endif %}
+
+    document.querySelectorAll('[data-richtext-editor]').forEach(function (el) {
+        var name     = el.dataset.richtextEditor;
+        var textarea = document.getElementById('field_' + name);
+        var options  = {
+            el: el,
+            height: '420px',
+            initialEditType: 'markdown',
+            previewStyle: 'tab',
+            hideModeSwitch: true,
+            initialValue: textarea.value,
+        };
+        {% if upload_url is defined and upload_url %}
+        options.hooks = {
+            addImageBlobHook: function (blob, callback) {
+                var fd = new FormData();
+                fd.append('file', blob);
+                fetch(uploadUrl, { method: 'POST', body: fd })
+                    .then(function (r) { return r.json(); })
+                    .then(function (d) {
+                        if (d.url) {
+                            callback(d.url);
+                        } else {
+                            alert(d.error || 'Upload failed.');
+                        }
+                    })
+                    .catch(function () { alert('Upload error.'); });
+            }
+        };
+        {% endif %}
+        editors.push({ editor: new toastui.Editor(options), textarea: textarea });
+    });
+
+    document.getElementById('content-form').addEventListener('submit', function () {
+        editors.forEach(function (item) {
+            item.textarea.value = item.editor.getMarkdown();
+        });
+    });
+}());
+</script>
+{% endblock %}

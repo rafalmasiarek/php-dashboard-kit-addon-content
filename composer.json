@@ -1,0 +1,19 @@
+{
+    "name": "rafalmasiarek/dashboard-kit-addon-content",
+    "description": "Content type management addon for dashboard-kit. Define content types via blueprints in admin_modules, auto-generates admin CRUD, and provides ContentRepository for public module access.",
+    "type": "library",
+    "license": "BUSL-1.1",
+    "require": {
+        "php": ">=8.2",
+        "rafalmasiarek/dashboard-kit": "*",
+        "slim/slim": "^4.0",
+        "league/commonmark": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "rafalmasiarek\\DashboardKitContent\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

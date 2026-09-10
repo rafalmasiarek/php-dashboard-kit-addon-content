@@ -1,0 +1,51 @@
+{% extends "admin-layout.twig" %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-end mb-3">
+    <a href="{{ content_base }}/new" class="btn btn-primary btn-sm">+ New</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col|replace({'_': ' '})|title }}</th>
+                    {% endfor %}
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    {% for col in columns %}
+                    <td>{{ item[col]|default('—') }}</td>
+                    {% endfor %}
+                    <td class="text-end">
+                        <a href="{{ content_base }}/{{ item.id }}/edit"
+                           class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <form method="post"
+                              action="{{ content_base }}/{{ item.id }}/delete"
+                              class="d-inline"
+                              onsubmit="return confirm('Delete this record?')">
+                            {{ csrf_field('content_' ~ slug) }}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="{{ columns|length + 1 }}"
+                        class="text-center text-muted py-5">
+                        No records yet.
+                        <a href="{{ content_base }}/new">Create one</a>.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
