@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/rafalmasiarek/php-dashboard-kit-addon-content/compare/v1.0.1...v1.1.0) (2026-10-05)
+
+
+### Features
+
+* **model:** migrate ContentRepository onto dashboard-kit's Model CRUD ([#5](https://github.com/rafalmasiarek/php-dashboard-kit-addon-content/issues/5)) ([b6a81e1](https://github.com/rafalmasiarek/php-dashboard-kit-addon-content/commit/b6a81e11becb720b985907b0f0dd34bdb2b4c063))
+
 ## [1.0.1](https://github.com/rafalmasiarek/php-dashboard-kit-addon-content/compare/v1.0.0...v1.0.1) (2026-09-13)
 
 
