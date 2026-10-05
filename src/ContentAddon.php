@@ -69,7 +69,7 @@ final class ContentAddon
 
         $container->set(
             ContentRepository::class,
-            static fn() => new ContentRepository($container->get(PDO::class))
+            static fn() => new ContentRepository()
         );
 
         $view = $container->get('view');
