@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitContent;
 
-use PDO;
+use rafalmasiarek\DashboardKit\Model\Model;
 
 /**
  * Provides read and write access to content type records.
@@ -12,20 +12,18 @@ use PDO;
  * Used both by ContentAddon for admin CRUD and by public modules in modules/
  * to fetch content for front-end rendering.
  *
- * All table names are validated to contain only alphanumeric characters and
- * underscores before use in queries.
+ * Built on Model::on() rather than a dedicated Model subclass, since each
+ * content type's table name is only known at runtime (admin-defined
+ * blueprints) — there is no fixed set of PHP classes to extend. Connects via
+ * Model's own connection resolver, so no PDO dependency of its own.
+ *
+ * All table names and column names are validated to contain only
+ * alphanumeric characters and underscores before use in queries.
  *
  * @package rafalmasiarek\DashboardKitContent
  */
 final class ContentRepository
 {
-    /**
-     * @param PDO $pdo Active database connection.
-     */
-    public function __construct(private readonly PDO $pdo)
-    {
-    }
-
     /**
      * Return all records from a content table ordered by creation date descending.
      *
@@ -37,13 +35,12 @@ final class ContentRepository
     public function findAll(string $table, int $limit = 200, int $offset = 0): array
     {
         $this->assertSafeIdentifier($table);
-        $stmt = $this->pdo->prepare(
-            'SELECT * FROM `' . $table . '` ORDER BY created_at DESC LIMIT :limit OFFSET :offset'
-        );
-        $stmt->bindValue(':limit',  $limit,  PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return Model::on($table)
+            ->orderBy('created_at', 'DESC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get()
+            ->toArray();
     }
 
     /**
@@ -56,10 +53,8 @@ final class ContentRepository
     public function findOne(string $table, int $id): ?array
     {
         $this->assertSafeIdentifier($table);
-        $stmt = $this->pdo->prepare('SELECT * FROM `' . $table . '` WHERE id = :id');
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ?: null;
+        /** @var array<string,mixed>|null */
+        return Model::on($table)->where('id', $id)->first();
     }
 
     /**
@@ -72,10 +67,8 @@ final class ContentRepository
     public function findBySlug(string $table, string $slug): ?array
     {
         $this->assertSafeIdentifier($table);
-        $stmt = $this->pdo->prepare('SELECT * FROM `' . $table . '` WHERE slug = :slug');
-        $stmt->execute([':slug' => $slug]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ?: null;
+        /** @var array<string,mixed>|null */
+        return Model::on($table)->where('slug', $slug)->first();
     }
 
     /**
@@ -92,12 +85,7 @@ final class ContentRepository
             $this->assertSafeIdentifier($k);
         }
 
-        $cols  = \implode(', ', \array_map(fn($k) => '`' . $k . '`', \array_keys($data)));
-        $holds = \implode(', ', \array_fill(0, \count($data), '?'));
-
-        $stmt = $this->pdo->prepare("INSERT INTO `{$table}` ({$cols}) VALUES ({$holds})");
-        $stmt->execute(\array_values($data));
-        return (int) $this->pdo->lastInsertId();
+        return (int) Model::on($table)->insert($data);
     }
 
     /**
@@ -115,9 +103,7 @@ final class ContentRepository
             $this->assertSafeIdentifier($k);
         }
 
-        $sets = \implode(', ', \array_map(fn($k) => '`' . $k . '` = ?', \array_keys($data)));
-        $stmt = $this->pdo->prepare("UPDATE `{$table}` SET {$sets} WHERE id = ?");
-        $stmt->execute([...\array_values($data), $id]);
+        Model::on($table)->where('id', $id)->update($data);
     }
 
     /**
@@ -130,8 +116,7 @@ final class ContentRepository
     public function delete(string $table, int $id): void
     {
         $this->assertSafeIdentifier($table);
-        $stmt = $this->pdo->prepare("DELETE FROM `{$table}` WHERE id = ?");
-        $stmt->execute([$id]);
+        Model::on($table)->where('id', $id)->forceDelete();
     }
 
     /**
