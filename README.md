@@ -1,12 +1,47 @@
 # dashboard-kit-addon-content
+
+
 [![Packagist Version](https://img.shields.io/packagist/v/rafalmasiarek/dashboard-kit-addon-content)](https://packagist.org/packages/rafalmasiarek/dashboard-kit-addon-content)
 [![Total Downloads](https://img.shields.io/packagist/dt/rafalmasiarek/dashboard-kit-addon-content)](https://packagist.org/packages/rafalmasiarek/dashboard-kit-addon-content)
 [![PHP](https://img.shields.io/packagist/php-v/rafalmasiarek/dashboard-kit-addon-content)](https://packagist.org/packages/rafalmasiarek/dashboard-kit-addon-content)
 [![License](https://img.shields.io/badge/license-BUSL--1.1-red)](https://github.com/rafalmasiarek/php-dashboard-kit-addon-content/blob/main/LICENSE)
 
+
+
+
+
+
+
 Blueprint-driven content type addon for [rafalmasiarek/dashboard-kit](https://github.com/rafalmasiarek/php-dashboard-kit).
 
 Define content types via a `content` blueprint in any admin module — the addon auto-creates the database table, generates admin CRUD routes, and provides a `ContentRepository` for reading records in front-end modules.
+
+
+
+
+
+
+
+## License
+
+![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-red)
+
+Business Source License 1.1.
+
+Source available; commercial use restricted until 2099-01-01.
+
+
+
+
+See [LICENSE](LICENSE) for full details.
+
+For alternative licensing, [contact us](https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-content&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-content.).
+
+
+
+## Authors
+
+- Rafał Masiarek | [website](https://masiarek.pl) | [github](https://github.com/rafalmasiarek)
 
 
 
@@ -595,24 +630,6 @@ Convert a richtext field value to HTML. Supports Markdown syntax, raw HTML block
 </details>
 
 
-
-## License
-
-![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-red)
-
-Business Source License 1.1.
-
-Source available; commercial use restricted until 2099-01-01.
-
-
-For alternative licensing, contact: https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-content&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-content.
-
-
-
-See [LICENSE](LICENSE) for full details.
-## Authors
-
-- Rafał Masiarek | [website](https://masiarek.pl) | [github](https://github.com/rafalmasiarek)
 
 
 <!-- references -->
