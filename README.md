@@ -10,17 +10,6 @@ Define content types via a `content` blueprint in any admin module — the addon
 
 
 
-## License
-![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-red)
-
-Business Source License 1.1.
-Source available; commercial use restricted until 2099-01-01.
-For alternative licensing, contact: https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-content&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-content.
-See [LICENSE](LICENSE) for full details.
-## Authors
-
-- Rafał Masiarek | [website](https://masiarek.pl) | [github](https://github.com/rafalmasiarek)
-
 
 ## Requirements
 
@@ -606,6 +595,24 @@ Convert a richtext field value to HTML. Supports Markdown syntax, raw HTML block
 </details>
 
 
+
+## License
+
+![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-red)
+
+Business Source License 1.1.
+
+Source available; commercial use restricted until 2099-01-01.
+
+
+For alternative licensing, contact: https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-content&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-content.
+
+
+
+See [LICENSE](LICENSE) for full details.
+## Authors
+
+- Rafał Masiarek | [website](https://masiarek.pl) | [github](https://github.com/rafalmasiarek)
 
 
 <!-- references -->
