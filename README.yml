@@ -25,7 +25,7 @@ context:
 
     Define content types via a `content` blueprint in any admin module — the addon auto-creates the database table, generates admin CRUD routes, and provides a `ContentRepository` for reading records in front-end modules.
 
-includes:
+footer_includes:
   - docs/usage.md
   - docs/schema.md
   - docs/api.md
