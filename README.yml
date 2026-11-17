@@ -2,7 +2,8 @@ name: dashboard-kit-addon-content
 repo_url: https://github.com/rafalmasiarek/php-dashboard-kit-addon-content
 license: BUSL-1.1
 license_change_date: "2099-01-01"
-license_contact: https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-content&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-content.
+license_footer: |
+  For alternative licensing, [contact us](https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-content&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-content.).
 
 badges:
   - name: Packagist Version
@@ -25,7 +26,7 @@ context:
 
     Define content types via a `content` blueprint in any admin module — the addon auto-creates the database table, generates admin CRUD routes, and provides a `ContentRepository` for reading records in front-end modules.
 
-includes:
+footer_includes:
   - docs/usage.md
   - docs/schema.md
   - docs/api.md
